@@ -497,6 +497,15 @@ class ProcessManager
         $this->controller->on('connection', [$this, 'onSlaveConnection']);
 
         $this->web = new Server(sprintf('%s:%d', $this->host, $this->port), $this->loop);
+        /*
+        $this->web = new Server(sprintf('%s:%d', $this->host, $this->port), $this->loop, ['tls' => [
+            'local_cert' => '/etc/letsencrypt/live/<hostname>/fullchain.pem',
+            'local_pk' => '/etc/letsencrypt/live/<hostname>/privkey.pem',
+            'cafile' => '/etc/letsencrypt/live/<hostname>/cert.pem',
+            'CN_match' => '<hostname>',
+            'crypto_method' => STREAM_CRYPTO_METHOD_TLSv1_2_SERVER,
+        ]]);
+        */
         $this->web->on('connection', [$this, 'onRequest']);
 
         $this->loop->addSignal(SIGTERM, [$this, 'shutdown']);
